@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import sequelize, { testDB } from "./db/index.js"
 import productRouter from "./services/products/route.js"
+import reviewRouter from "./services/reviews/route.js"
 import {
   badRequestErrorHandler,
   unauthorizedErrorHandler,
@@ -13,6 +14,7 @@ server.use(express.json())
 server.use(cors())
 
 server.use("/products", productRouter)
+server.use("/reviews", reviewRouter)
 
 const { PORT } = process.env
 
