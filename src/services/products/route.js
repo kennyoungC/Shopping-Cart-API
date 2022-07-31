@@ -8,7 +8,7 @@ router
   .route("/")
   .get(productsHandler.getAll)
   .post(productsHandler.createNewProduct)
-
+router.get("/search", productsHandler.searchByName)
 router
   .route("/:id")
   .get(productsHandler.getProductById)

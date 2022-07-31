@@ -11,6 +11,10 @@ const Product = sequelize.define("products", {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
+    validate: {
+      notNull: { msg: "Product must have a name" },
+      notEmpty: { msg: "Name must not be empty" },
+    },
   },
   price: {
     type: DataTypes.FLOAT,
@@ -19,6 +23,10 @@ const Product = sequelize.define("products", {
   category: {
     type: DataTypes.STRING,
     allowNull: false,
+    validate: {
+      notNull: { msg: "Product must have a category" },
+      notEmpty: { msg: "Category must not be empty" },
+    },
   },
   imageUrl: {
     type: DataTypes.STRING,

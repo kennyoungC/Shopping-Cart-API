@@ -1,10 +1,26 @@
 import createHttpError from "http-errors"
 import models from "../../db/models/index.js"
+import Sequelize from "sequelize"
 
-const { Product } = models
+const Op = Sequelize.Op
+
+const { Product, Review } = models
 const getAll = async (req, res, next) => {
   try {
-    const products = await Product.findAll()
+    const products = await Product.findAll({ include: Review })
+    res.send(products)
+  } catch (error) {
+    next(createHttpError(400, error.message))
+  }
+}
+const searchByName = async (req, res, next) => {
+  try {
+    const name = req.query.name
+    console.log("QUERY", name)
+    const products = await Product.findAll({
+      include: Review,
+      where: { name: { [Op.like]: `%${name}%` } },
+    })
     res.send(products)
   } catch (error) {
     next(createHttpError(400, error.message))
@@ -61,6 +77,7 @@ const deleteProduct = async (req, res, next) => {
 const productsHandler = {
   getAll,
   createNewProduct,
+  searchByName,
   getProductById,
   editProduct,
   deleteProduct,

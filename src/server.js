@@ -1,5 +1,6 @@
 import express from "express"
 import cors from "cors"
+import listEndpoints from "express-list-endpoints"
 import sequelize, { testDB } from "./db/index.js"
 import productRouter from "./services/products/route.js"
 import reviewRouter from "./services/reviews/route.js"
@@ -22,8 +23,9 @@ const initialize = async () => {
   try {
     server.listen(PORT, async () => {
       console.log("✅ Server is listening on port " + PORT)
+      console.table(listEndpoints(server))
       await testDB()
-      await sequelize.sync({ logging: false, force: true })
+      await sequelize.sync({ logging: false })
     })
 
     server.on("error", (error) => {
