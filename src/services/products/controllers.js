@@ -5,10 +5,10 @@ import ProductCategory from "../../db/models/productCategory.js"
 
 const Op = Sequelize.Op
 
-const { Product, Review } = models
+const { Product, Review, Category } = models
 const getAll = async (req, res, next) => {
   try {
-    const products = await Product.findAll({ include: Review })
+    const products = await Product.findAll({ include: [Review, Category] })
     res.send(products)
   } catch (error) {
     next(createHttpError(400, error.message))
@@ -33,35 +33,21 @@ const createNewProduct = async (req, res, next) => {
     const newProduct = await Product.create(rest)
     console.log("CATEGORIES", categories)
     let values
-    // = {
-    //   productId: newProduct.id,
-    //   categoryId: categories,
-    // }
-    // await ProductCategory.create(values)
-    console.log(Array.isArray(categories))
-    // if (Array.isArray(categories)) {
-    values = categories.map((category) => ({
-      productId: newProduct.id,
-      categoryId: category,
-    }))
-    // }
-    await ProductCategory.bulkCreate(values)
+    if (Array.isArray(categories)) {
+      values = categories.map((category) => ({
+        productId: newProduct.id,
+        categoryId: category,
+      }))
+      await ProductCategory.bulkCreate(values)
+    } else {
+      values = {
+        productId: newProduct.id,
+        categoryId: categories,
+      }
+      await ProductCategory.create(values)
+    }
     console.log("VALUES", values)
-    // const newProductCategory = await ProductCategory.create(values)
-    // console.log("NEW PRODUCT CATEGORY", newProductCategory)
-    // if (Array.isArray(categories)) {
-    //   values = categories.map((category) => ({
-    //     productId: newProduct.id,
-    //     categoryId: category,
-    //   }))
-    //   await ProductCategory.bulkCreate(values)
-    // } else {
-    //   (values = {
-    //     productId: newProduct.id,
-    //     categoryId: categories,
-    //   }),
-    //     await ProductCategory.create(values)
-    // }
+
     res.send(newProduct)
   } catch (error) {
     next(createHttpError(400, error.message))

@@ -1,11 +1,11 @@
 import createHttpError from "http-errors"
 import models from "../../db/models/index.js"
 
-const { Product, Review } = models
+const { Product, Review, User } = models
 const getAll = async (req, res, next) => {
   try {
     const rev = await Review.findAll({
-      include: Product,
+      include: [Product, User],
     })
     res.send(rev)
   } catch (error) {
@@ -16,11 +16,12 @@ const getAll = async (req, res, next) => {
 const createNewReview = async (req, res, next) => {
   try {
     const product = await Product.findOne({ where: { id: req.params.id } })
-    console.log(product)
+    const { userId, ...rest } = req.body
     if (product) {
       const rev = await Review.create({
-        ...req.body,
+        ...rest,
         productId: product.id,
+        userId,
       })
       res.send(rev)
     } else {

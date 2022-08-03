@@ -1,11 +1,11 @@
 import createHttpError from "http-errors"
 import models from "../../db/models/index.js"
 
-const { User, Review, Comment } = models
+const { User, Review, Comment, Product } = models
 const getAll = async (req, res, next) => {
   try {
     const users = await User.findAll({
-      include: [Review, Comment],
+      include: [{ model: Review, include: Product }, Comment],
     })
     res.send(users)
   } catch (error) {
