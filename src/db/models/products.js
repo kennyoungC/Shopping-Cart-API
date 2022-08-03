@@ -20,14 +20,7 @@ const Product = sequelize.define("products", {
     type: DataTypes.FLOAT,
     allowNull: false,
   },
-  category: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      notNull: { msg: "Product must have a category" },
-      notEmpty: { msg: "Category must not be empty" },
-    },
-  },
+
   imageUrl: {
     type: DataTypes.STRING,
     allowNull: false,

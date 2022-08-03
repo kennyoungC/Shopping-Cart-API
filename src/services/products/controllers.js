@@ -1,6 +1,7 @@
 import createHttpError from "http-errors"
 import models from "../../db/models/index.js"
 import Sequelize from "sequelize"
+import ProductCategory from "../../db/models/productCategory.js"
 
 const Op = Sequelize.Op
 
@@ -28,7 +29,39 @@ const searchByName = async (req, res, next) => {
 }
 const createNewProduct = async (req, res, next) => {
   try {
-    const newProduct = await Product.create(req.body)
+    const { categories, ...rest } = req.body
+    const newProduct = await Product.create(rest)
+    console.log("CATEGORIES", categories)
+    let values
+    // = {
+    //   productId: newProduct.id,
+    //   categoryId: categories,
+    // }
+    // await ProductCategory.create(values)
+    console.log(Array.isArray(categories))
+    // if (Array.isArray(categories)) {
+    values = categories.map((category) => ({
+      productId: newProduct.id,
+      categoryId: category,
+    }))
+    // }
+    await ProductCategory.bulkCreate(values)
+    console.log("VALUES", values)
+    // const newProductCategory = await ProductCategory.create(values)
+    // console.log("NEW PRODUCT CATEGORY", newProductCategory)
+    // if (Array.isArray(categories)) {
+    //   values = categories.map((category) => ({
+    //     productId: newProduct.id,
+    //     categoryId: category,
+    //   }))
+    //   await ProductCategory.bulkCreate(values)
+    // } else {
+    //   (values = {
+    //     productId: newProduct.id,
+    //     categoryId: categories,
+    //   }),
+    //     await ProductCategory.create(values)
+    // }
     res.send(newProduct)
   } catch (error) {
     next(createHttpError(400, error.message))
