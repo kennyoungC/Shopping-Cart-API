@@ -15,4 +15,6 @@ router
   .put(productsHandler.editProduct)
   .delete(productsHandler.deleteProduct)
 
+router.get("/max", productsHandler.getMaxProd)
+
 export default router

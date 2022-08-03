@@ -14,6 +14,15 @@ const getAll = async (req, res, next) => {
     next(createHttpError(400, error.message))
   }
 }
+const getMaxProd = async (req, res, next) => {
+  try {
+    const products = await Product.max("price")
+    console.log(products)
+    res.send(products)
+  } catch (error) {
+    next(createHttpError(400, error.message))
+  }
+}
 const searchByName = async (req, res, next) => {
   try {
     const name = req.query.name
@@ -100,5 +109,6 @@ const productsHandler = {
   getProductById,
   editProduct,
   deleteProduct,
+  getMaxProd,
 }
 export default productsHandler
