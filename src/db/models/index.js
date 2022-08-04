@@ -1,9 +1,10 @@
-import Product from "./products.js"
-import Review from "./reviews.js"
-import Category from "./category.js"
-import ProductCategory from "./productCategory.js"
-import User from "./users.js"
-import Comment from "./comments.js"
+import Product from "./Products.js"
+import Review from "./Reviews.js"
+import Category from "./Category.js"
+import ProductCategory from "./ProductCategory.js"
+import User from "./Users.js"
+import Comment from "./Comments.js"
+import Cart from "./Cart.js"
 
 // PRODUCT -> REVIEW
 Product.hasMany(Review, { onDelete: "CASCADE" })
@@ -29,6 +30,22 @@ Category.belongsToMany(Product, {
   through: { model: ProductCategory, unique: false },
 })
 
-// PRODUCTCATEGORY -> PRODUCT AND USER (SUPER MANY TO MANY)
+// CART -> PRODUCT AND USER (SUPER MANY TO MANY)
+Product.belongsToMany(User, { through: { model: Cart, unique: false } })
+User.belongsToMany(Product, { through: { model: Cart, unique: false } })
 
-export default { Product, Review, Category, ProductCategory, User, Comment }
+Product.hasMany(Cart, { onDelete: "CASCADE" })
+Cart.belongsTo(Product, { onDelete: "CASCADE" })
+
+User.hasMany(Cart, { onDelete: "CASCADE" })
+Cart.belongsTo(User, { onDelete: "CASCADE" })
+
+export default {
+  Product,
+  Review,
+  Category,
+  ProductCategory,
+  User,
+  Comment,
+  Cart,
+}

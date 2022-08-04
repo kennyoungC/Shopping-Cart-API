@@ -1,7 +1,7 @@
 import createHttpError from "http-errors"
 import models from "../../db/models/index.js"
 import Sequelize, { where } from "sequelize"
-import ProductCategory from "../../db/models/productCategory.js"
+import ProductCategory from "../../db/models/ProductCategory.js"
 
 const Op = Sequelize.Op
 
@@ -10,6 +10,8 @@ const getAll = async (req, res, next) => {
   try {
     const { search, category } = req.query
     const products = await Product.findAll({
+      limit: 10,
+      offset: req.query.offset,
       include: [
         {
           model: Category,
@@ -22,6 +24,11 @@ const getAll = async (req, res, next) => {
         { model: Comment, include: User },
         Review,
       ],
+      where: {
+        ...(search && {
+          name: { [Op.iLike]: `%${search}%` },
+        }),
+      },
     })
     res.send(products)
   } catch (error) {
