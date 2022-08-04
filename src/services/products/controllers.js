@@ -1,7 +1,7 @@
 import createHttpError from "http-errors"
 import models from "../../db/models/index.js"
 import Sequelize from "sequelize"
-import productCategory from "../../db/models/ProductCategory.js"
+import productCategory from "../../db/models/Product-category.js"
 
 const Op = Sequelize.Op
 
@@ -10,7 +10,7 @@ const getAll = async (req, res, next) => {
   try {
     const { search, category } = req.query
     const products = await Product.findAll({
-      limit: 10,
+      limit: req.query.size,
       offset: req.query.offset,
       include: [
         {
