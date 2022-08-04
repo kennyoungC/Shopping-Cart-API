@@ -1,5 +1,5 @@
 import Product from "./products.js"
-import Review from "./Reviews.js"
+import Review from "./reviews.js"
 import Category from "./Category.js"
 import ProductCategory from "./Product-category.js"
 import User from "./Users.js"
