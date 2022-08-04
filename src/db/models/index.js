@@ -17,6 +17,10 @@ Review.belongsTo(User, { onDelete: "CASCADE" })
 User.hasMany(Comment, { onDelete: "CASCADE" })
 Comment.belongsTo(User, { onDelete: "CASCADE" })
 
+// PRODUCT -> COMMENT (ONE TO MANY)
+Product.hasMany(Comment, { onDelete: "CASCADE" })
+Comment.belongsTo(Product, { onDelete: "CASCADE" })
+
 // PRODUCT -> CATEGORY (MANY TO MANY)
 Product.belongsToMany(Category, {
   through: { model: ProductCategory, unique: false },
@@ -24,5 +28,7 @@ Product.belongsToMany(Category, {
 Category.belongsToMany(Product, {
   through: { model: ProductCategory, unique: false },
 })
+
+// PRODUCTCATEGORY -> PRODUCT AND USER (SUPER MANY TO MANY)
 
 export default { Product, Review, Category, ProductCategory, User, Comment }

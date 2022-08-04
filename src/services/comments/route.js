@@ -3,9 +3,12 @@ import commentsHandler from "./controllers.js"
 
 const router = express.Router()
 
-router.route("/:userId").post(commentsHandler.postComment)
 router
-  .route("/:userId/commentId/comments")
+  .route("/")
+  .post(commentsHandler.postComment)
+  .get(commentsHandler.getAllComments)
+router
+  .route("/:commentId")
   .put(commentsHandler.editComment)
   .delete(commentsHandler.deleteComment)
 

@@ -1,14 +1,28 @@
 import createHttpError from "http-errors"
 import models from "../../db/models/index.js"
-import Sequelize from "sequelize"
+import Sequelize, { where } from "sequelize"
 import ProductCategory from "../../db/models/productCategory.js"
 
 const Op = Sequelize.Op
 
-const { Product, Review, Category } = models
+const { Product, Review, Category, Comment, User } = models
 const getAll = async (req, res, next) => {
   try {
-    const products = await Product.findAll({ include: [Review, Category] })
+    const { search, category } = req.query
+    const products = await Product.findAll({
+      include: [
+        {
+          model: Category,
+          where: category
+            ? {
+                name: { [Op.like]: `%${category}%` },
+              }
+            : {},
+        },
+        { model: Comment, include: User },
+        Review,
+      ],
+    })
     res.send(products)
   } catch (error) {
     next(createHttpError(400, error.message))
@@ -23,19 +37,7 @@ const getMaxProd = async (req, res, next) => {
     next(createHttpError(400, error.message))
   }
 }
-const searchByName = async (req, res, next) => {
-  try {
-    const name = req.query.name
-    console.log("QUERY", name)
-    const products = await Product.findAll({
-      include: Review,
-      where: { name: { [Op.like]: `%${name}%` } },
-    })
-    res.send(products)
-  } catch (error) {
-    next(createHttpError(400, error.message))
-  }
-}
+
 const createNewProduct = async (req, res, next) => {
   try {
     const { categories, ...rest } = req.body
@@ -105,7 +107,6 @@ const deleteProduct = async (req, res, next) => {
 const productsHandler = {
   getAll,
   createNewProduct,
-  searchByName,
   getProductById,
   editProduct,
   deleteProduct,
