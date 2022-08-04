@@ -1,6 +1,6 @@
 import createHttpError from "http-errors"
 import models from "../../db/models/index.js"
-import Sequelize, { where } from "sequelize"
+import Sequelize from "sequelize"
 import ProductCategory from "../../db/models/ProductCategory.js"
 
 const Op = Sequelize.Op
@@ -58,6 +58,7 @@ const createNewProduct = async (req, res, next) => {
         productId: newProduct.id,
         categoryId: category,
       }))
+
       await ProductCategory.bulkCreate(values)
     } else {
       values = {
