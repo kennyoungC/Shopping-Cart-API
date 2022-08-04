@@ -1,19 +1,19 @@
 import createHttpError from "http-errors"
-import sequelize from "../../db/index.js"
 import models from "../../db/models/index.js"
+import sequelize from "sequelize"
 const { Product, User, Cart, Category } = models
 
 const getUserCartItems = async (req, res, next) => {
   try {
     const cart = await Cart.findAll({
       where: { userId: req.params.userId },
-      include: { model: Product, include: Category },
+      include: Product,
       attributes: [
         "productId",
-        [sequelize.fn("COUNT", sequelize.col("productId")), "qty"],
-        [sequelize.fn("SUM", sequelize.col("product.price")), "total"],
+        [sequelize.fn("COUNT", "productId"), "qty"],
+        [sequelize.fn("SUM", sequelize.col("product.price")), "unitary_price"],
       ],
-      group: ["productId", "product.id", "product.category.id"],
+      group: ["productId", "product.id"],
     })
 
     const totalQty = await Cart.count({
@@ -41,8 +41,8 @@ const addToCart = async (req, res, next) => {
 }
 const deleteCartItem = async (req, res, next) => {
   try {
-    const { userId, productId } = req.params
-    const rows = await Cart.destroy({ where: { userId, productId } })
+    const { cartId } = req.params
+    const rows = await Cart.destroy({ where: { id: cartId } })
     res.status(204).send({ rows })
   } catch (error) {
     next(createHttpError(400, error))

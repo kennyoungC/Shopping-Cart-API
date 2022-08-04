@@ -6,6 +6,7 @@ import productRouter from "./services/products/route.js"
 import reviewRouter from "./services/reviews/route.js"
 import categorieRouter from "./services/categories/route.js"
 import userRouter from "./services/users/route.js"
+import cartRouter from "./services/cart/route.js"
 
 import {
   badRequestErrorHandler,
@@ -24,6 +25,7 @@ server.use("/reviews", reviewRouter)
 server.use("/categories", categorieRouter)
 server.use("/users", userRouter)
 server.use("/comments", commentRouter)
+server.use("/carts", cartRouter)
 
 const { PORT } = process.env
 

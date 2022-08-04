@@ -49,7 +49,9 @@ const createNewProduct = async (req, res, next) => {
   try {
     const { categories, ...rest } = req.body
     const newProduct = await Product.create(rest)
-    console.log("CATEGORIES", categories)
+    if (categories === undefined) {
+      res.status(400).send("No categories provided")
+    }
     let values
     if (Array.isArray(categories)) {
       values = categories.map((category) => ({
