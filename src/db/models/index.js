@@ -1,10 +1,10 @@
 import Product from "./products.js"
 import Review from "./reviews.js"
-import Category from "./Category.js"
-import ProductCategory from "./Product-category.js"
-import User from "./Users.js"
-import Comment from "./Comments.js"
-import Cart from "./Cart.js"
+import Category from "./category.js"
+import ProductCategory from "./product-category.js"
+import User from "./users.js"
+import Comment from "./comments.js"
+import Cart from "./cart.js"
 
 // PRODUCT -> REVIEW
 Product.hasMany(Review, { onDelete: "CASCADE" })
