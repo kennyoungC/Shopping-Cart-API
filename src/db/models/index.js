@@ -1,4 +1,4 @@
-import Product from "./Products.js"
+import Product from "./products.js"
 import Review from "./Reviews.js"
 import Category from "./Category.js"
 import ProductCategory from "./Product-category.js"
