@@ -1,7 +1,7 @@
 import createHttpError from "http-errors"
 import models from "../../db/models/index.js"
 import Sequelize from "sequelize"
-import productCategory from "../../db/models/product-category.js"
+import productCategory from "../../db/models/productCategory.js"
 
 const Op = Sequelize.Op
 
